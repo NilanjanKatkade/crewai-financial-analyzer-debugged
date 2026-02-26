@@ -38,7 +38,6 @@ The system analyzes financial documents like Tesla's Q2 2025 financial update.
 - Market insights
 
 
-
 # CrewAI Financial Document Analyzer — Debugged & Stabilized
 
 ## Overview
@@ -185,6 +184,23 @@ Fetch analysis result.
 ```
 
 ---
+
+## Application Screenshots
+
+### 1. FastAPI Server Running (Swagger UI)
+![Swagger UI](assets/FlaskUI.png)
+
+### 2. Sending Financial Document for Analysis (POST Request)
+![POST Request](assets/POSTRequest.png)
+
+### 3. Upload Form Input
+![Upload Input](assets/InputPostrequest.png)
+
+### 4. Fetching Analysis Result (GET Request)
+![GET Request](assets/OutputGetrequest.png)
+
+### 5. Structured Financial Analysis Output
+![Analysis Output](assets/Output.png)
 
 ## Bugs Found and Fixes
 
