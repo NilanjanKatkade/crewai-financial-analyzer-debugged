@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from crewai import Agent
-from langchain_openai import ChatOpenAI
+# from langchain_openai import ChatOpenAI
 from tools import FinancialDocumentTool
 
 # ---------- LLM ----------

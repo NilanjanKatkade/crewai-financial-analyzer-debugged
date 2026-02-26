@@ -63,13 +63,14 @@
 
 from crewai.tools import BaseTool
 from pydantic import BaseModel, Field
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+# from langchain.text_splitter import RecursiveCharacterTextSplitter
 import os
 from dotenv import load_dotenv
+from pypdf import PdfReader
 load_dotenv()
 
 # from crewai_tools import SerperDevTool
-from langchain_community.document_loaders import PyPDFLoader
+# from langchain_community.document_loaders import PyPDFLoader
 
 #SEARCH TOOL
 # search_tool = SerperDevTool()
@@ -91,6 +92,8 @@ class FinancialDocumentTool(BaseTool):
     )
     args_schema: Type[BaseModel] = FinancialDocumentInput
 
+
+
     def _run(self, path: str) -> str:
 
         if not os.path.exists(path):
@@ -99,64 +102,21 @@ class FinancialDocumentTool(BaseTool):
         if not path.lower().endswith(".pdf"):
             raise ValueError("Only PDF files are supported")
 
-        loader = PyPDFLoader(path)
-        docs = loader.load()
+        reader = PdfReader(path)
 
         full_report = ""
 
-        # ----------- Read the PDF -----------
-        for doc in docs:
-            page_text = doc.page_content
+        for page in reader.pages:
+            text = page.extract_text()
+            if text:
+                text = text.replace("\r", " ")
+                text = text.replace("\t", " ")
+                text = " ".join(text.split())
+                full_report += text + "\n"
 
-            page_text = page_text.replace("\r", " ")
-            page_text = page_text.replace("\t", " ")
-
-            while "\n\n" in page_text:
-                page_text = page_text.replace("\n\n", "\n")
-
-            while "  " in page_text:
-                page_text = page_text.replace("  ", " ")
-
-            full_report += page_text.strip() + "\n"
-
-
-        # ----------- IMPORTANT: Chunking (Fixes token overflow) -----------
-
-        from langchain.text_splitter import RecursiveCharacterTextSplitter
-
-        splitter = RecursiveCharacterTextSplitter(
-            chunk_size=1200,
-            chunk_overlap=200
-        )
-
-        chunks = splitter.split_text(full_report)
-        # only most important financial pages
-        selected_chunks = []
-
-        keywords = [
-            "revenue",
-            "net income",
-            "cash flow",
-            "balance sheet",
-            "total assets",
-            "total liabilities",
-            "operating income",
-            "risk factors",
-            "liquidity",
-            "guidance"
-        ]
-
-        for chunk in chunks:
-            if any(k.lower() in chunk.lower() for k in keywords):
-                selected_chunks.append(chunk)
-
-        # HARD LIMIT (VERY IMPORTANT)
-        selected_chunks = selected_chunks[:5]
-
-        compressed_report = "\n\n".join(selected_chunks)
-
-        return compressed_report
-
+        # Safety guard for LLM context
+        MAX_CHARS = 6000
+        return full_report[:MAX_CHARS]
 #OPTIONAL: Investment Tool (Structured Stub)
 class InvestmentTool:
 

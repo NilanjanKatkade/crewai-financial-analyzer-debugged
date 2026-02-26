@@ -23,3 +23,20 @@ Thumbs.db
 # IDE settings
 .vscode/
 .idea/
+
+# environments
+venv/
+testenv/
+.env
+
+# python
+__pycache__/
+*.pyc
+
+# runtime data
+uploads/
+chromadb/
+
+# OS
+.DS_Store
+Thumbs.db
