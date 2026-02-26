@@ -190,11 +190,11 @@ Fetch analysis result.
 ### 1. FastAPI Server Running (Swagger UI)
 ![Swagger UI](assets/FlaskUI.png)
 
-### 2. Sending Financial Document for Analysis (POST Request)
-![POST Request](assets/POSTRequest.png)
-
-### 3. Upload Form Input
+### 2. Upload Form Input
 ![Upload Input](assets/InputPostrequest.png)
+
+### 3. Sending Financial Document for Analysis (POST Request)
+![POST Request](assets/POSTRequest.png)
 
 ### 4. Fetching Analysis Result (GET Request)
 ![GET Request](assets/OutputGetrequest.png)
